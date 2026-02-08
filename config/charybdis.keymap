@@ -7,16 +7,38 @@
 #include <behaviors/mouse_keys.dtsi>
 
 &lt {
-    tapping-term-ms = <150>;
+    tapping-term-ms = <200>;
     flavor = "balanced";
     quick-tap-ms = <150>;
 };
 
 &mt {
-    tapping-term-ms = <150>;
+    tapping-term-ms = <200>;
 };
 
 / {
+    combos {
+            compatible = "zmk,combos";
+
+            combo_enter {
+                bindings = <&kp ENTER>;
+                key-positions = <9 10>;
+                timeout-ms = <100>;
+            };
+
+            combo_mouse_M {
+                bindings = <&mkp LCLK>;
+                key-positions = <10 11>;
+                timeout-ms = <100>;
+            };
+
+            combo_mouse_L {
+                bindings = <&mkp LCLK>;
+                key-positions = <8 9>;
+                timeout-ms = <100>;
+            };
+        };
+
     keymap {
         compatible = "zmk,keymap";
 
