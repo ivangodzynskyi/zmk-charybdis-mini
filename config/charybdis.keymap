@@ -22,19 +22,19 @@
 
             combo_enter {
                 bindings = <&kp ENTER>;
-                key-positions = <9 10>;
+                key-positions = <8 9>;
                 timeout-ms = <100>;
             };
 
             combo_mouse_M {
                 bindings = <&mkp LCLK>;
-                key-positions = <10 11>;
+                key-positions = <9 10>;
                 timeout-ms = <100>;
             };
 
             combo_mouse_L {
                 bindings = <&mkp LCLK>;
-                key-positions = <8 9>;
+                key-positions = <10 11>;
                 timeout-ms = <100>;
             };
         };
