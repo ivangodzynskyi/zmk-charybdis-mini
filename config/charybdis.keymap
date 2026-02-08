@@ -7,7 +7,7 @@
 #include <behaviors/mouse_keys.dtsi>
 
 &lt {
-    tapping-term-ms = <240>;
+    tapping-term-ms = <150>;
     flavor = "balanced";
     quick-tap-ms = <150>;
 };
@@ -25,8 +25,8 @@
             bindings = <
   &kp TILDE  &kp Q  &kp W      &kp E      &kp R  &kp T    &kp Y    &kp U      &kp I    &kp O     &kp P    &kp LBKT
   &kp TAB  &mt LSHFT A  &mt LCTRL S      &mt LEFT_ALT D      &mt LGUI F  &kp G    &kp H    &mt LGUI J      &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI    &kp APOS
-&kp LSHFT  &kp Z  &kp X      &kp C      &kp V  &kp B    &kp N    &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp RSHIFT
-                         &mkp LCLK  &kp BSPC  &mo 1    &mo 2  &kp SPACE
+&kp LSHFT  &kp Z  &kp X      &lt 1 C      &lt 2 V  &kp B    &kp N    &lt 2 M  &lt 1 COMMA  &kp DOT  &kp FSLH  &kp RSHIFT
+                         &mkp LCLK  &lt 1 BSPC  &lt 2 ESC    &kp RET   &lt 1 SPACE
             >;
         };
 
