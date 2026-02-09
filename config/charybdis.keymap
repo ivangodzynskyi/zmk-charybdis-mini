@@ -14,6 +14,9 @@
 
 &mt {
     tapping-term-ms = <200>;
+    flavor = "balanced";
+    quick-tap-ms = <150>;
+    require-prior-idle-ms = <125>;
 };
 
 / {
@@ -23,19 +26,19 @@
             combo_enter {
                 bindings = <&kp ENTER>;
                 key-positions = <8 9>;
-                timeout-ms = <100>;
+                timeout-ms = <50>;
             };
 
             combo_mouse_L {
                 bindings = <&mkp LCLK>;
                 key-positions = <7 8>;
-                timeout-ms = <100>;
+                timeout-ms = <50>;
             };
 
             combo_mouse_M {
                 bindings = <&mkp MCLK>;
                 key-positions = <9 10>;
-                timeout-ms = <100>;
+                timeout-ms = <50>;
             };
         };
 
