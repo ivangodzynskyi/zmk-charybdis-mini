@@ -40,6 +40,24 @@
                 key-positions = <9 10>;
                 timeout-ms = <50>;
             };
+
+            combo_cmd_C {
+                bindings = <&kp LGUI &kp C>;
+                key-positions = <26 27>;
+                timeout-ms = <50>;
+            };
+
+            combo_cmd_V {
+                bindings = <&kp LGUI &kp V>;
+                key-positions = <27 28>;
+                timeout-ms = <50>;
+            };
+
+            combo_cmd_Z {
+                bindings = <&kp LGUI &kp Z>;
+                key-positions = <25 26>;
+                timeout-ms = <50>;
+            };
         };
 
     keymap {
@@ -78,9 +96,9 @@
         Arrows {
             label = "Arrows";
             bindings = <
-&trans  &trans  &trans  &trans  &trans   &trans      &trans  &trans  &bootloader  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans   &trans      &trans  &kp LEFT  &trans  &kp UP  &kp RIGHT  &trans
-&trans  &trans  &trans  &trans  &trans   &trans      &trans  &trans  &trans  &kp DOWN  &trans  &trans
+&trans  &trans  &trans  &trans  &trans   &trans      &trans  &trans  &bootloader  &trans  &trans     &trans
+&trans  &trans  &trans  &trans  &trans   &trans      &trans  &kp LEFT  &trans  &kp UP     &kp RIGHT  &trans
+&trans  &trans  &trans  &trans  &trans   &trans      &trans  &kp LEFT  &trans  &kp DOWN   &kp RIGHT  &trans
                         &trans  &trans   &trans      &trans  &trans
             >;
         };
@@ -99,8 +117,8 @@
             bindings = <
    &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
    &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
-&mkp MCLK  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans  &mkp LCLK
-                           &mkp LCLK  &trans  &mkp RCLK    &trans  &trans
+&mkp MCLK  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
+                              &trans  &trans     &trans    &trans  &trans
             >;
         };
     };
