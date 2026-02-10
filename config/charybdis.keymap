@@ -20,6 +20,26 @@
 };
 
 / {
+    macros {
+        cmd_c: cmd_c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp C>, <&macro_release &kp LGUI>;
+        };
+
+        cmd_v: cmd_v {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp V>, <&macro_release &kp LGUI>;
+        };
+
+        cmd_z: cmd_z {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp Z>, <&macro_release &kp LGUI>;
+        };
+    };
+
     combos {
             compatible = "zmk,combos";
 
@@ -42,19 +62,19 @@
             };
 
             combo_cmd_C {
-                bindings = <&kp LGUI &kp C>;
+                bindings = <&cmd_c>;
                 key-positions = <26 27>;
                 timeout-ms = <50>;
             };
 
             combo_cmd_V {
-                bindings = <&kp LGUI &kp V>;
+                bindings = <&cmd_v>;
                 key-positions = <27 28>;
                 timeout-ms = <50>;
             };
 
             combo_cmd_Z {
-                bindings = <&kp LGUI &kp Z>;
+                bindings = <&cmd_z>;
                 key-positions = <25 26>;
                 timeout-ms = <50>;
             };
@@ -117,7 +137,7 @@
             bindings = <
    &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans     &trans       &trans     &trans     &trans
    &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans     &trans       &trans     &trans     &trans
-   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &mkp LCLK  &lt 2 COMMA  &mkp RCLK  &trans     &trans
+   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &mkp LCLK  &mkp MCLK    &mkp RCLK  &trans     &trans
                               &trans  &trans     &trans    &trans  &trans
             >;
         };
