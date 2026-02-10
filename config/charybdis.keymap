@@ -68,7 +68,7 @@
             bindings = <
   &kp GRAVE  &kp Q      &kp W            &kp E               &kp R       &kp T        &kp Y    &kp U          &kp I             &kp O        &kp P             &kp LBKT
   &kp TAB  &mt LSHFT A  &mt LCTRL S      &mt LEFT_ALT D      &mt LGUI F  &kp G        &kp H    &mt LGUI J     &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI    &kp APOS
-  &mo 4    &kp Z        &kp X            &lt 1 C             &lt 2 V     &kp B        &kp N    &lt 2 M        &lt 3 COMMA       &kp DOT      &kp FSLH          &mkp RCLK
+  &mo 4    &kp Z        &kp X            &lt 1 C             &lt 2 V     &kp B        &kp N    &lt 2 M        &lt 3 COMMA       &kp DOT      &lt 5 FSLH          &mkp RCLK
                                          &mkp LCLK           &lt 1 BSPC  &lt 2 ESC    &kp RET  &lt 1 SPACE
             >;
         };
@@ -115,9 +115,9 @@
 
         Mouse {
             bindings = <
-   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
-   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
-&mkp MCLK  &trans  &trans     &trans  &trans     &trans    &trans  &trans  &trans  &trans  &trans     &trans
+   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans     &trans       &trans     &trans     &trans
+   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &trans     &trans       &trans     &trans     &trans
+   &trans  &trans  &trans     &trans  &trans     &trans    &trans  &mkp LCLK  &lt 2 COMMA  &mkp RCLK  &trans     &trans
                               &trans  &trans     &trans    &trans  &trans
             >;
         };
