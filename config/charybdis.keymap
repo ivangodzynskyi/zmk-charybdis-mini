@@ -32,7 +32,7 @@
         };
 
         // Constant-speed scroll that emits exactly one step per trigger
-        // period: 125 units/s * 40 ms = 5 wheel units per step
+        // period: 900 units/s * 40 ms = 36 wheel units per step
         msc_step: mouse_scroll_step {
             compatible = "zmk,behavior-input-two-axis";
             #binding-cells = <1>;
@@ -51,19 +51,19 @@
 
     macros {
         // Hold msc_step for 60 ms: the first step fires at 40 ms and the
-        // release cancels the second one at 80 ms, giving exactly 5 lines
+        // release cancels the second one at 80 ms, giving exactly 36 units
         scroll_down_5: scroll_down_5 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <60>;
-            bindings = <&macro_press &msc_step MOVE_Y(300)>, <&macro_release &msc_step MOVE_Y(300)>;
+            bindings = <&macro_press &msc_step MOVE_Y(900)>, <&macro_release &msc_step MOVE_Y(900)>;
         };
 
         scroll_up_5: scroll_up_5 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <60>;
-            bindings = <&macro_press &msc_step MOVE_Y(-300)>, <&macro_release &msc_step MOVE_Y(-300)>;
+            bindings = <&macro_press &msc_step MOVE_Y(-900)>, <&macro_release &msc_step MOVE_Y(-900)>;
         };
 
         cmd_c: cmd_c {
