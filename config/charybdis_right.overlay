@@ -32,5 +32,11 @@
             layers = <2>;
             input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 2 &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
+
+        // Half the normal cursor speed (the base 2x scaler does not apply here)
+        precise {
+            layers = <6>;
+            input-processors = <&zip_xy_scaler 1 1>;
+        };
     };
 };
