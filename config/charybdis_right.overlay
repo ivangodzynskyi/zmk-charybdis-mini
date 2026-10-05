@@ -13,7 +13,7 @@
         sensitivity = "2x";
         // rotate-90;
         // x-invert;
-        // y-invert;
+        y-invert;
         // no-taps;
         // no-secondary-tap;
     };
