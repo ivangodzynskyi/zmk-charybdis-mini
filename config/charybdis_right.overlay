@@ -17,7 +17,7 @@
         // rotate-90;
         // x-invert;
         y-invert;
-        rotation-deg = <12>;
+        rotation-deg = <25>;
         // no-taps;
         // no-secondary-tap;
     };
@@ -40,7 +40,7 @@
         };
 
         scroller {
-            layers = <2>;
+            layers = <2, 7>;
             input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8 &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
 
