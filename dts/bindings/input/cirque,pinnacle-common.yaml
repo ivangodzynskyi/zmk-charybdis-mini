@@ -28,4 +28,10 @@ properties:
   y-axis-z-min:
     type: int
     default: 4
+  rotation-deg:
+    type: int
+    default: 0
+    description: |
+      Rotate the trackpad axes counter-clockwise by this many degrees
+      (negative values rotate clockwise).
 

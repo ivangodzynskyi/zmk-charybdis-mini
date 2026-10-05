@@ -75,6 +75,8 @@
 struct pinnacle_data {
     uint8_t btn_cache;
     bool in_int;
+    int32_t rot_sin, rot_cos; // Q12 fixed point
+    int32_t rem_x, rem_y;     // Q12 remainders carried between reports
     const struct device *dev;
     struct gpio_callback gpio_cb;
     struct k_work work;
@@ -104,6 +106,7 @@ struct pinnacle_config {
     bool rotate_90, sleep_en, no_taps, no_secondary_tap, x_invert, y_invert;
     enum pinnacle_sensitivity sensitivity;
     uint8_t x_axis_z_min, y_axis_z_min;
+    int16_t rotation_deg;
     const struct gpio_dt_spec dr;
 };
 

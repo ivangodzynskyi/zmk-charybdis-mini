@@ -246,6 +246,36 @@ static int pinnacle_era_write(const struct device *dev, const uint16_t addr, uin
     return ret;
 }
 
+#define PINNACLE_Q12 4096
+
+// Integer sine in Q12 using Bhaskara I's approximation (error < 0.002)
+static int32_t pinnacle_sin_q12(int32_t deg) {
+    int32_t sign = 1;
+
+    deg %= 360;
+    if (deg < 0) {
+        deg += 360;
+    }
+    if (deg >= 180) {
+        deg -= 180;
+        sign = -1;
+    }
+
+    int32_t p = deg * (180 - deg);
+    return sign * (4 * p * PINNACLE_Q12) / (40500 - p);
+}
+
+// Rotate the axes counter-clockwise; dx/dy use screen coordinates (Y down)
+static void pinnacle_rotate(struct pinnacle_data *data, int16_t *dx, int16_t *dy) {
+    int32_t x = *dx * data->rot_cos - *dy * data->rot_sin + data->rem_x;
+    int32_t y = *dx * data->rot_sin + *dy * data->rot_cos + data->rem_y;
+
+    *dx = x / PINNACLE_Q12;
+    *dy = y / PINNACLE_Q12;
+    data->rem_x = x - *dx * PINNACLE_Q12;
+    data->rem_y = y - *dy * PINNACLE_Q12;
+}
+
 static void pinnacle_report_data(const struct device *dev) {
     const struct pinnacle_config *config = dev->config;
     uint8_t packet[3];
@@ -301,8 +331,13 @@ static void pinnacle_report_data(const struct device *dev) {
 
     data->btn_cache = btn;
 
-    input_report_rel(dev, INPUT_REL_X, dx, false, K_FOREVER);
-    input_report_rel(dev, INPUT_REL_Y, dy, true, K_FOREVER);
+    int16_t out_x = dx, out_y = dy;
+    if (config->rotation_deg) {
+        pinnacle_rotate(data, &out_x, &out_y);
+    }
+
+    input_report_rel(dev, INPUT_REL_X, out_x, false, K_FOREVER);
+    input_report_rel(dev, INPUT_REL_Y, out_y, true, K_FOREVER);
 
     return;
 }
@@ -459,6 +494,9 @@ static int pinnacle_init(const struct device *dev) {
     LOG_DBG("Found device with FW ID: 0x%02x, Version: 0x%02x", fw_id[0], fw_id[1]);
 
     data->in_int = false;
+    data->rot_sin = pinnacle_sin_q12(config->rotation_deg);
+    data->rot_cos = pinnacle_sin_q12(config->rotation_deg + 90);
+    data->rem_x = data->rem_y = 0;
     k_msleep(10);
     ret = pinnacle_write(dev, PINNACLE_STATUS1, 0); // Clear CC
     if (ret < 0) {
@@ -606,6 +644,7 @@ static int pinnacle_pm_action(const struct device *dev, enum pm_device_action ac
         .no_secondary_tap = DT_INST_PROP(n, no_secondary_tap),                                     \
         .x_axis_z_min = DT_INST_PROP_OR(n, x_axis_z_min, 5),                                       \
         .y_axis_z_min = DT_INST_PROP_OR(n, y_axis_z_min, 4),                                       \
+        .rotation_deg = DT_INST_PROP_OR(n, rotation_deg, 0),                                       \
         .sensitivity = DT_INST_ENUM_IDX_OR(n, sensitivity, PINNACLE_SENSITIVITY_1X),               \
         .dr = GPIO_DT_SPEC_GET_OR(DT_DRV_INST(n), dr_gpios, {}),                                   \
     };                                                                                             \

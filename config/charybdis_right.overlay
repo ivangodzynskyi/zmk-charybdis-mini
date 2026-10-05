@@ -17,6 +17,7 @@
         // rotate-90;
         // x-invert;
         y-invert;
+        rotation-deg = <12>;
         // no-taps;
         // no-secondary-tap;
     };
