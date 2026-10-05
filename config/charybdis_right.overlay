@@ -1,5 +1,7 @@
 #include <input/processors/code_mapper.dtsi>
 #include <input/processors/scaler.dtsi>
+#include <input/processors/transform.dtsi>
+#include <dt-bindings/zmk/input_transform.h>
 
 &i2c0 {
     status = "okay";
@@ -28,7 +30,7 @@
 
         scroller {
             layers = <2>;
-            input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 2>;
+            input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 2 &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
     };
 };
