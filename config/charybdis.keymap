@@ -32,13 +32,26 @@
         };
 
         // Constant-speed scroll that emits exactly one step per trigger
-        // period: 125 units/s * 40 ms = 5 wheel units per step
+        // period: 900 units/s * 40 ms = 36 wheel units per step
         msc_step: mouse_scroll_step {
             compatible = "zmk,behavior-input-two-axis";
             #binding-cells = <1>;
             x-input-code = <INPUT_REL_HWHEEL>;
             y-input-code = <INPUT_REL_WHEEL>;
             trigger-period-ms = <40>;
+            time-to-max-speed-ms = <0>;
+            acceleration-exponent = <0>;
+        };
+
+        // Auto-repeat while held: after a 150 ms delay, one burst every
+        // 100 ms: 360 units/s * 100 ms = 36 wheel units per burst
+        msc_repeat: mouse_scroll_repeat {
+            compatible = "zmk,behavior-input-two-axis";
+            #binding-cells = <1>;
+            x-input-code = <INPUT_REL_HWHEEL>;
+            y-input-code = <INPUT_REL_WHEEL>;
+            trigger-period-ms = <100>;
+            delay-ms = <150>;
             time-to-max-speed-ms = <0>;
             acceleration-exponent = <0>;
         };
@@ -49,21 +62,39 @@
         device = <&msc_step>;
     };
 
+    msc_repeat_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&msc_repeat>;
+    };
+
     macros {
-        // Hold msc_step for 60 ms: the first step fires at 40 ms and the
-        // release cancels the second one at 80 ms, giving exactly 5 lines
-        scroll_down_5: scroll_down_5 {
+        // Hold msc_step for 60 ms so exactly one 36-unit step fires at 40 ms,
+        // then hand over to msc_repeat until the key is released. A quick tap
+        // releases msc_repeat before its first burst, so it scrolls only once.
+        scroll_down: scroll_down {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <60>;
-            bindings = <&macro_press &msc_step MOVE_Y(300)>, <&macro_release &msc_step MOVE_Y(300)>;
+            bindings
+                = <&macro_press &msc_step MOVE_Y(900)>
+                , <&macro_release &msc_step MOVE_Y(900)>
+                , <&macro_press &msc_repeat MOVE_Y(360)>
+                , <&macro_pause_for_release>
+                , <&macro_release &msc_repeat MOVE_Y(360)>
+                ;
         };
 
-        scroll_up_5: scroll_up_5 {
+        scroll_up: scroll_up {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <60>;
-            bindings = <&macro_press &msc_step MOVE_Y(-300)>, <&macro_release &msc_step MOVE_Y(-300)>;
+            bindings
+                = <&macro_press &msc_step MOVE_Y(-900)>
+                , <&macro_release &msc_step MOVE_Y(-900)>
+                , <&macro_press &msc_repeat MOVE_Y(-360)>
+                , <&macro_pause_for_release>
+                , <&macro_release &msc_repeat MOVE_Y(-360)>
+                ;
         };
 
         cmd_c: cmd_c {
@@ -181,8 +212,8 @@
         Mouse {
             bindings = <
    &trans  &trans  &trans           &trans          &trans          &trans    &trans  &trans            &trans           &trans         &trans      &trans
-   &trans  &trans  &scroll_up_5     &scroll_up_5    &scroll_up_5    &trans    &trans  &scroll_up_5      &scroll_up_5     &scroll_up_5   &trans      &trans
-   &trans  &trans  &scroll_down_5   &scroll_down_5  &scroll_down_5  &trans    &trans  &scroll_down_5    &scroll_down_5   &scroll_down_5 &trans      &trans
+   &trans  &trans  &scroll_up       &scroll_up      &scroll_up      &trans    &trans  &scroll_up        &scroll_up       &scroll_up     &trans      &trans
+   &trans  &trans  &scroll_down     &scroll_down    &scroll_down    &trans    &trans  &scroll_down      &scroll_down     &scroll_down   &trans      &trans
                                     &trans          &trans          &trans    &trans  &trans
             >;
         };
