@@ -9,7 +9,7 @@
         status = "okay";
         compatible = "cirque,pinnacle";
         reg = <0x2a>;
-        dr-gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH)>;
+        // No DR pin wired: the driver polls instead (CONFIG_INPUT_PINNACLE_POLL_INTERVAL_MS)
         sensitivity = "2x";
         // rotate-90;
         // x-invert;
