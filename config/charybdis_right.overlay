@@ -14,10 +14,10 @@
         reg = <0x2a>;
         // No DR pin wired: the driver polls instead (CONFIG_INPUT_PINNACLE_POLL_INTERVAL_MS)
         sensitivity = "2x";
-        rotate-180;
+        // rotate-90;
         // x-invert;
         y-invert;
-        // rotation-deg = <25>;
+        rotation-deg = <180>;
         // no-taps;
         // no-secondary-tap;
     };
