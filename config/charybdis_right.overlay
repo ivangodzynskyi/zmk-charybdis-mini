@@ -14,10 +14,10 @@
         reg = <0x2a>;
         // No DR pin wired: the driver polls instead (CONFIG_INPUT_PINNACLE_POLL_INTERVAL_MS)
         sensitivity = "2x";
-        // rotate-90;
+        rotate-180;
         // x-invert;
         y-invert;
-        rotation-deg = <25>;
+        // rotation-deg = <25>;
         // no-taps;
         // no-secondary-tap;
     };
@@ -34,19 +34,19 @@
         // movement and passes it on, so scroll is 4x faster with Z held and
         // the precise node compensates for the doubling.
         z_boost {
-            layers = <6>;
+            layers = <1>;
             process-next;
             input-processors = <&zip_xy_scaler 4 1>;
         };
 
         scroller {
-            layers = <2 7>;
+            layers = <1 2>;
             input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8 &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
 
         // Half the normal cursor speed on both axes, after the 4x from z_boost
         precise {
-            layers = <6>;
+            layers = <5>;
             input-processors = <&zip_x_scaler 1 4 &zip_y_scaler 3 8>;
         };
     };
