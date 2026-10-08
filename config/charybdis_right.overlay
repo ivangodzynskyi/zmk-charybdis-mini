@@ -18,8 +18,8 @@
         x-invert;
         // y-invert;
         // rotation-deg = <180>;
-        // no-taps;
-        // no-secondary-tap;
+        no-taps;
+        no-secondary-tap;
     };
 };
 
@@ -28,7 +28,7 @@
         compatible = "zmk,input-listener";
         device = <&trackpad>;
         // Vertical axis 1.5x faster than horizontal
-        input-processors = <&zip_x_scaler 2 1 &zip_y_scaler 3 1>;
+        input-processors = <&zip_x_scaler 8 5 &zip_y_scaler 12 5>;
 
         // Overrides run in order. Holding Z (layer 6) first doubles the raw
         // movement and passes it on, so scroll is 4x faster with Z held and
@@ -44,10 +44,11 @@
             input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8 &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
 
-        // Half the normal cursor speed on both axes, after the 4x from z_boost
+        // 30% slower than the base speed on both axes (0.7 x 8/5 and 0.7 x 12/5).
+        // This override replaces the base processors, so it scales raw movement.
         precise {
             layers = <5>;
-            input-processors = <&zip_x_scaler 1 4 &zip_y_scaler 3 8>;
+            input-processors = <&zip_x_scaler 28 25 &zip_y_scaler 42 25>;
         };
     };
 };
