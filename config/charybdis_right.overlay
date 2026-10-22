@@ -20,8 +20,8 @@
         // rotation-deg = <180>;
         no-taps;
         no-secondary-tap;
-        // The sensor reports right movement about 2x weaker than left
-        x-positive-scale-percent = <200>;
+        // The sensor reports right movement weaker than left; boost it 1.5x
+        x-positive-scale-percent = <150>;
     };
 };
 
