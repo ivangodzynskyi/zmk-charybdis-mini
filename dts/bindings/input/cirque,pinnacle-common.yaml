@@ -34,4 +34,10 @@ properties:
     description: |
       Rotate the trackpad axes counter-clockwise by this many degrees
       (negative values rotate clockwise).
+  x-positive-scale-percent:
+    type: int
+    default: 100
+    description: |
+      Scale positive X movement (to the right) by this percentage, leaving
+      negative X movement unchanged. Compensates for an asymmetric sensor.
 

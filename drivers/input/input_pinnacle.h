@@ -77,6 +77,7 @@ struct pinnacle_data {
     bool in_int;
     int32_t rot_sin, rot_cos; // Q12 fixed point
     int32_t rem_x, rem_y;     // Q12 remainders carried between reports
+    int32_t rem_pos_x;        // Remainder of the positive X scaling, in 1/100 units
     const struct device *dev;
     struct gpio_callback gpio_cb;
     struct k_work work;
@@ -107,6 +108,7 @@ struct pinnacle_config {
     enum pinnacle_sensitivity sensitivity;
     uint8_t x_axis_z_min, y_axis_z_min;
     int16_t rotation_deg;
+    uint16_t x_positive_scale_percent;
     const struct gpio_dt_spec dr;
 };
 

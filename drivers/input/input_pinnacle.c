@@ -335,6 +335,12 @@ static void pinnacle_report_data(const struct device *dev) {
     if (config->rotation_deg) {
         pinnacle_rotate(data, &out_x, &out_y);
     }
+    if (out_x > 0 && config->x_positive_scale_percent != 100) {
+        int32_t x = out_x * config->x_positive_scale_percent + data->rem_pos_x;
+
+        out_x = x / 100;
+        data->rem_pos_x = x - out_x * 100;
+    }
 
     input_report_rel(dev, INPUT_REL_X, out_x, false, K_FOREVER);
     input_report_rel(dev, INPUT_REL_Y, out_y, true, K_FOREVER);
@@ -645,6 +651,7 @@ static int pinnacle_pm_action(const struct device *dev, enum pm_device_action ac
         .x_axis_z_min = DT_INST_PROP_OR(n, x_axis_z_min, 5),                                       \
         .y_axis_z_min = DT_INST_PROP_OR(n, y_axis_z_min, 4),                                       \
         .rotation_deg = DT_INST_PROP_OR(n, rotation_deg, 0),                                       \
+        .x_positive_scale_percent = DT_INST_PROP_OR(n, x_positive_scale_percent, 100),             \
         .sensitivity = DT_INST_ENUM_IDX_OR(n, sensitivity, PINNACLE_SENSITIVITY_1X),               \
         .dr = GPIO_DT_SPEC_GET_OR(DT_DRV_INST(n), dr_gpios, {}),                                   \
     };                                                                                             \
