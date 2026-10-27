@@ -170,20 +170,20 @@
         Base {
             label = "Base";
             bindings = <
-  &kp GRAVE  &kp Q      &kp W            &mt GLOBE E         &kp R       &kp T        &kp Y       &kp U          &lt 6 I             &kp O        &lt 5 P             &kp LBKT
-  &kp TAB  &mt LSHFT A  &mt LCTRL S      &mt LEFT_ALT D      &mt LGUI F  &kp G        &kp H    &mt LGUI J     &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI    &kp APOS
-  &mo 4    &lt 5 Z      &kp X            &lt 1 C             &lt 2 V     &kp B        &kp N         &kp M          &lt 3 COMMA       &kp DOT      &lt 5 FSLH          &mkp RCLK
-                                         &mkp LCLK  &lt 1 BSPC  &lt 2 ESC  &lt 1 SPACE  &kp RET
+  &kp GRAVE     &kp Q       &kp W           &mt GLOBE E         &kp R       &kp T           &lt 7 Y         &lt 7 U        &lt 6 I           &kp O        &lt 5 P             &kp LBKT
+  &kp TAB       &mt LSHFT A &mt LCTRL S     &mt LEFT_ALT D      &mt LGUI F  &kp G           &kp H           &mt LGUI J     &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI      &kp APOS
+  &mo 4         &lt 5 Z     &kp X           &lt 1 C             &lt 2 V     &kp B           &kp N           &kp M          &lt 3 COMMA       &kp DOT      &kp FSLH            &mkp RCLK
+                                            &mkp LCLK           &lt 1 BSPC  &lt 2 ESC       &lt 1 SPACE     &kp RET
             >;
         };
 
         Lower {
             label = "Lower";
             bindings = <
-      &trans    &trans    &trans     &trans     &trans    &trans       &kp N6      &kp N7  &kp N8  &kp N9    &kp N0    &kp RBKT
-      &trans    &trans    &trans     &trans     &trans    &trans       &kp EQUAL   &kp N4  &kp N5  &kp N6    &kp BSPC  &kp BSLH
-      &trans    &trans    &trans     &trans     &trans    &trans       &kp MINUS   &kp N1  &kp N2  &kp N3    &trans    &trans
-                                     &trans  &trans  &trans  &kp N0  &kp DOT
+      &trans    &trans    &trans     &trans     &trans    &trans       &kp N6       &kp N7  &kp N8  &kp N9    &kp N0    &kp RBKT
+      &trans    &trans    &trans     &trans     &trans    &trans       &kp EQUAL    &kp N4  &kp N5  &kp N6    &kp BSPC  &kp BSLH
+      &trans    &trans    &trans     &trans     &trans    &trans       &kp MINUS    &kp N1  &kp N2  &kp N3    &trans    &trans
+                                     &trans     &trans    &trans       &kp N0       &kp DOT
             >;
         };
 
@@ -219,10 +219,10 @@
 
         Mouse {
             bindings = <
-   &trans  &trans  &trans           &trans          &trans          &trans    &mkp LCLK  &trans            &mkp MCLK           &mkp RCLK         &trans      &trans
-   &trans  &trans  &scroll_up_slow     &scroll_up_mid    &scroll_up_fast    &trans    &mkp LCLK  &scroll_up_fast      &scroll_up_mid     &scroll_up_slow   &trans      &trans
-   &trans  &trans  &scroll_down_slow   &scroll_down_mid  &scroll_down_fast  &trans    &trans     &scroll_down_fast    &scroll_down_mid   &scroll_down_slow &trans      &trans
-                                    &trans          &trans          &trans    &trans     &trans
+   &trans  &trans  &trans               &trans              &trans              &trans          &trans      &trans               &mkp MCLK           &mkp RCLK         &trans      &trans
+   &trans  &trans  &scroll_up_slow      &scroll_up_mid      &scroll_up_fast     &trans          &trans      &scroll_up_fast      &scroll_up_mid      &scroll_up_slow   &trans      &trans
+   &trans  &trans  &scroll_down_slow    &scroll_down_mid    &scroll_down_fast   &trans          &trans      &scroll_down_fast    &scroll_down_mid    &scroll_down_slow &trans      &trans
+                                        &trans              &trans              &trans          &mkp LCLK   &trans
             >;
         };
 
@@ -233,6 +233,15 @@
 &trans  &trans  &trans  &trans  &trans   &trans      &trans  &kp LEFT  &trans  &kp DOWN   &kp RIGHT    &trans
 &trans  &trans  &trans  &trans  &trans   &trans      &trans  &trans    &trans  &trans     &trans       &trans
                         &trans  &trans   &trans      &trans  &trans
+            >;
+        };
+
+        Scr {
+            bindings = <
+   &trans  &trans  &trans               &trans              &trans              &trans          &trans      &trans  &scroll_up_fast     &scroll_up_mid      &scroll_up_slow     &trans
+   &trans  &trans  &scroll_up_slow      &scroll_up_mid      &scroll_up_fast     &trans          &trans      &trans  &scroll_down_fast   &scroll_down_mid    &scroll_down_slow   &trans
+   &trans  &trans  &scroll_down_slow    &scroll_down_mid    &scroll_down_fast   &trans          &trans      &trans  &trans              &trans              &trans              &trans
+                                        &trans              &trans              &trans          &trans      &trans
             >;
         };
         
