@@ -303,9 +303,9 @@
         // D/C scroll at mid speed, F/V slowly, ` and Tab step the scroll speed
         MouseKeys {
             bindings = <
-   &mspd MSPD_SCRL_INC  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X / 2)  &mmv_accel MOVE_Y(-CURSOR_Y / 2)  &mmv_accel MOVE_Y(CURSOR_Y / 2)  &mmv_accel MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
-   &mspd MSPD_SCRL_DEC  &trans  &trans  &scroll_up_mid    &scroll_up_slow    &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X)      &mmv_accel MOVE_Y(-CURSOR_Y)      &mmv_accel MOVE_Y(CURSOR_Y)      &mmv_accel MOVE_X(CURSOR_X)      &mspd MSPD_DEC
-   &trans               &trans  &mo 9   &scroll_down_mid  &scroll_down_slow  &trans      &trans  &trans                            &trans                            &trans                           &trans                           &trans
+   &mspd MSPD_SCRL_INC  &trans  &trans  &trans              &trans              &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X / 2)  &mmv_accel MOVE_Y(-CURSOR_Y / 2)  &mmv_accel MOVE_Y(CURSOR_Y / 2)  &mmv_accel MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
+   &mspd MSPD_SCRL_DEC  &trans  &trans  &scroll_up_mid      &scroll_up_slow     &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X)      &mmv_accel MOVE_Y(-CURSOR_Y)      &mmv_accel MOVE_Y(CURSOR_Y)      &mmv_accel MOVE_X(CURSOR_X)      &mspd MSPD_DEC
+   &trans               &trans  &mo 9   &scroll_down_mid    &scroll_down_slow   &trans      &trans  &mkp LCLK                         &trans                            &mkp MCLK                        &mkp RCLK                        &trans
                            &trans  &trans  &trans      &trans  &trans
             >;
         };
