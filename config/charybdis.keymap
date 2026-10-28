@@ -65,7 +65,7 @@
             acceleration-exponent = <1>;
         };
 
-        // Steps the mmv_accel speed level up or down for the active BT profile
+        // Steps the cursor or scroll speed level up or down for the active BT profile
         mspd: mouse_speed {
             compatible = "zmk,behavior-mouse-speed";
             #binding-cells = <1>;
@@ -77,9 +77,17 @@
         #input-processor-cells = <2>;
     };
 
+    // Scroll speed follows the per-profile scroll level set on the MouseKeys layer
     msc_smooth_input_listener {
         compatible = "zmk,input-listener";
         device = <&msc_smooth>;
+        input-processors = <&zip_mouse_speed 1 1>;
+
+        // Holding X on the MouseKeys layer halves the speed
+        slow {
+            layers = <9>;
+            input-processors = <&zip_mouse_speed 1 2>;
+        };
     };
 
     mmv_accel_input_listener {
@@ -291,12 +299,13 @@
         };
 
         // Hold Space. JKL; move at full speed, UIOP at half speed, X held
-        // halves any movement, [ and ' step the speed up and down
+        // halves any movement, [ and ' step the cursor speed up and down.
+        // D/C scroll at mid speed, F/V slowly, ` and Tab step the scroll speed
         MouseKeys {
             bindings = <
-   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X / 2)  &mmv_accel MOVE_Y(-CURSOR_Y / 2)  &mmv_accel MOVE_Y(CURSOR_Y / 2)  &mmv_accel MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
-   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X)      &mmv_accel MOVE_Y(-CURSOR_Y)      &mmv_accel MOVE_Y(CURSOR_Y)      &mmv_accel MOVE_X(CURSOR_X)      &mspd MSPD_DEC
-   &trans  &trans  &mo 9   &trans  &trans  &trans      &trans  &trans                            &trans                            &trans                           &trans                           &trans
+   &mspd MSPD_SCRL_INC  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X / 2)  &mmv_accel MOVE_Y(-CURSOR_Y / 2)  &mmv_accel MOVE_Y(CURSOR_Y / 2)  &mmv_accel MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
+   &mspd MSPD_SCRL_DEC  &trans  &trans  &scroll_up_mid    &scroll_up_slow    &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X)      &mmv_accel MOVE_Y(-CURSOR_Y)      &mmv_accel MOVE_Y(CURSOR_Y)      &mmv_accel MOVE_X(CURSOR_X)      &mspd MSPD_DEC
+   &trans               &trans  &mo 9   &scroll_down_mid  &scroll_down_slow  &trans      &trans  &trans                            &trans                            &trans                           &trans                           &trans
                            &trans  &trans  &trans      &trans  &trans
             >;
         };

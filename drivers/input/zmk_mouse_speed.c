@@ -1,9 +1,10 @@
 /*
- * Adjustable speed for keyboard-driven cursor movement.
+ * Adjustable speed for keyboard-driven cursor movement and scrolling.
  *
- * The input processor scales REL_X/REL_Y by the current speed level and by
- * its own mul/div params. The behavior steps the level up or down. Levels are
- * kept per BLE profile and persisted in settings.
+ * The input processor scales REL_X/REL_Y by the cursor speed level,
+ * REL_WHEEL/REL_HWHEEL by the scroll speed level, and both by its own mul/div
+ * params. The behavior steps either level up or down. Levels are kept per BLE
+ * profile and persisted in settings.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -35,6 +36,7 @@ static const uint16_t level_percents[] = {25, 35, 50, 70, 100, 140, 200, 280, 40
 #endif
 
 static uint8_t levels[PROFILE_COUNT];
+static uint8_t scroll_levels[PROFILE_COUNT];
 
 static int active_slot(void) {
 #if IS_ENABLED(CONFIG_ZMK_BLE)
@@ -50,30 +52,36 @@ static int active_slot(void) {
 
 static void save_work_cb(struct k_work *work) {
     settings_save_one("mouse_speed/levels", levels, sizeof(levels));
+    settings_save_one("mouse_speed/scroll_levels", scroll_levels, sizeof(scroll_levels));
 }
 
 static K_WORK_DELAYABLE_DEFINE(save_work, save_work_cb);
 
 static int mouse_speed_settings_set(const char *name, size_t len, settings_read_cb read_cb,
                                     void *cb_arg) {
-    if (!settings_name_steq(name, "levels", NULL)) {
+    uint8_t *target;
+    if (settings_name_steq(name, "levels", NULL)) {
+        target = levels;
+    } else if (settings_name_steq(name, "scroll_levels", NULL)) {
+        target = scroll_levels;
+    } else {
         return -ENOENT;
     }
 
     // Ignore stored data saved with a different profile count
-    if (len != sizeof(levels)) {
+    if (len != PROFILE_COUNT) {
         return 0;
     }
 
-    int err = read_cb(cb_arg, levels, sizeof(levels));
+    int err = read_cb(cb_arg, target, PROFILE_COUNT);
     if (err < 0) {
         LOG_ERR("Failed to read mouse speed levels (err %d)", err);
         return err;
     }
 
     for (int i = 0; i < PROFILE_COUNT; i++) {
-        if (levels[i] >= ARRAY_SIZE(level_percents)) {
-            levels[i] = DEFAULT_LEVEL;
+        if (target[i] >= ARRAY_SIZE(level_percents)) {
+            target[i] = DEFAULT_LEVEL;
         }
     }
 
@@ -88,24 +96,43 @@ SETTINGS_STATIC_HANDLER_DEFINE(mouse_speed, "mouse_speed", NULL, mouse_speed_set
 static int mouse_speed_init(const struct device *dev) {
     for (int i = 0; i < PROFILE_COUNT; i++) {
         levels[i] = DEFAULT_LEVEL;
+        scroll_levels[i] = DEFAULT_LEVEL;
     }
     return 0;
 }
 
 // Input processor
 
-static int16_t remainders[2];
+// Indexed by axis: REL_X, REL_Y, REL_HWHEEL, REL_WHEEL
+static int16_t remainders[4];
 
 static int mouse_speed_handle_event(const struct device *dev, struct input_event *event,
                                     uint32_t param1, uint32_t param2,
                                     struct zmk_input_processor_state *state) {
-    if (event->type != INPUT_EV_REL ||
-        (event->code != INPUT_REL_X && event->code != INPUT_REL_Y)) {
+    if (event->type != INPUT_EV_REL) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    int axis = event->code == INPUT_REL_X ? 0 : 1;
-    int32_t mul = level_percents[levels[active_slot()]] * param1;
+    int axis;
+    switch (event->code) {
+    case INPUT_REL_X:
+        axis = 0;
+        break;
+    case INPUT_REL_Y:
+        axis = 1;
+        break;
+    case INPUT_REL_HWHEEL:
+        axis = 2;
+        break;
+    case INPUT_REL_WHEEL:
+        axis = 3;
+        break;
+    default:
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
+    uint8_t *slot_levels = axis < 2 ? levels : scroll_levels;
+    int32_t mul = level_percents[slot_levels[active_slot()]] * param1;
     int32_t div = 100 * param2;
 
     int32_t value = event->value * mul + remainders[axis];
@@ -129,26 +156,39 @@ DEVICE_DT_DEFINE(DT_INST(0, zmk_input_processor_mouse_speed), mouse_speed_init, 
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
     int slot = active_slot();
-    int level = levels[slot];
+    uint8_t *slot_levels;
+    int step;
 
     switch (binding->param1) {
     case MSPD_INC:
-        level = MIN(level + 1, (int)ARRAY_SIZE(level_percents) - 1);
+        slot_levels = levels;
+        step = 1;
         break;
     case MSPD_DEC:
-        level = MAX(level - 1, 0);
+        slot_levels = levels;
+        step = -1;
+        break;
+    case MSPD_SCRL_INC:
+        slot_levels = scroll_levels;
+        step = 1;
+        break;
+    case MSPD_SCRL_DEC:
+        slot_levels = scroll_levels;
+        step = -1;
         break;
     default:
         LOG_ERR("Unknown mouse speed command: %d", binding->param1);
         return -ENOTSUP;
     }
 
-    if (level == levels[slot]) {
+    int level = CLAMP(slot_levels[slot] + step, 0, (int)ARRAY_SIZE(level_percents) - 1);
+    if (level == slot_levels[slot]) {
         return ZMK_BEHAVIOR_OPAQUE;
     }
 
-    levels[slot] = level;
-    LOG_DBG("Profile %d mouse speed %d%%", slot, level_percents[level]);
+    slot_levels[slot] = level;
+    LOG_DBG("Profile %d %s speed %d%%", slot, slot_levels == levels ? "cursor" : "scroll",
+            level_percents[level]);
 
 #if IS_ENABLED(CONFIG_SETTINGS)
     k_work_reschedule(&save_work, K_MSEC(CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE));
