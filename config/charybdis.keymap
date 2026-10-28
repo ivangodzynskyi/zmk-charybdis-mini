@@ -226,7 +226,7 @@
   &kp GRAVE     &kp Q       &kp W           &mt GLOBE E         &kp R       &kp T           &lt 7 Y         &lt 7 U        &lt 6 I           &kp O        &lt 5 P             &kp LBKT
   &kp TAB       &mt LSHFT A &mt LCTRL S     &mt LEFT_ALT D      &mt LGUI F  &kp G           &kp H           &mt LGUI J     &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI      &kp APOS
   &mo 4         &lt 5 Z     &kp X           &lt 1 C             &lt 2 V     &kp B           &kp N           &kp M          &lt 3 COMMA       &kp DOT      &kp FSLH            &mkp RCLK
-                                            &mkp LCLK           &lt 1 BSPC  &lt 2 ESC       &lt 8 SPACE     &kp RET
+                                            &mkp LCLK           &lt 1 BSPC  &lt 2 ESC       &lt 8 SPACE     &tog 8
             >;
         };
 
@@ -298,8 +298,9 @@
             >;
         };
 
-        // Hold Space. JKL; move at full speed, UIOP at half speed, X held
-        // halves any movement, [ and ' step the cursor speed up and down.
+        // Hold Space, or tap Enter to toggle the layer on and off. JKL; move
+        // at full speed, UIOP at half speed, X held halves any movement,
+        // [ and ' step the cursor speed up and down.
         // D/C scroll at mid speed, F/V slowly, ` and Tab step the scroll speed
         MouseKeys {
             bindings = <
