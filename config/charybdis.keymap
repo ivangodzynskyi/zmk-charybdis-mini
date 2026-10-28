@@ -11,9 +11,9 @@
 #define SCROLL_SPEED(n) ((n) * 10)
 
 // Keyboard cursor speed in pixels per second at the 100% speed level.
-// Horizontal is 15/9 of vertical so diagonals follow the screen aspect ratio.
+// Horizontal is 12/9 of vertical.
 #define CURSOR_Y 600
-#define CURSOR_X (CURSOR_Y * 15 / 9)
+#define CURSOR_X (CURSOR_Y * 12 / 9)
 
 &lt {
     tapping-term-ms = <200>;
@@ -52,19 +52,20 @@
             acceleration-exponent = <0>;
         };
 
-        // Constant-speed cursor movement: moves while held, stops on release.
+        // Cursor movement: accelerates to full speed over 300 ms while held,
+        // stops on release.
         // Holding two directions adds them up into a diagonal
-        mmv_const: mouse_move_constant {
+        mmv_accel: mouse_move_accel {
             compatible = "zmk,behavior-input-two-axis";
             #binding-cells = <1>;
             x-input-code = <INPUT_REL_X>;
             y-input-code = <INPUT_REL_Y>;
             trigger-period-ms = <8>;
-            time-to-max-speed-ms = <0>;
-            acceleration-exponent = <0>;
+            time-to-max-speed-ms = <300>;
+            acceleration-exponent = <1>;
         };
 
-        // Steps the mmv_const speed level up or down for the active BT profile
+        // Steps the mmv_accel speed level up or down for the active BT profile
         mspd: mouse_speed {
             compatible = "zmk,behavior-mouse-speed";
             #binding-cells = <1>;
@@ -81,9 +82,9 @@
         device = <&msc_smooth>;
     };
 
-    mmv_const_input_listener {
+    mmv_accel_input_listener {
         compatible = "zmk,input-listener";
-        device = <&mmv_const>;
+        device = <&mmv_accel>;
         input-processors = <&zip_mouse_speed 1 1>;
 
         // Holding X on the MouseKeys layer halves the speed
@@ -293,8 +294,8 @@
         // halves any movement, [ and ' step the speed up and down
         MouseKeys {
             bindings = <
-   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_const MOVE_X(-CURSOR_X / 2)  &mmv_const MOVE_Y(-CURSOR_Y / 2)  &mmv_const MOVE_Y(CURSOR_Y / 2)  &mmv_const MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
-   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_const MOVE_X(-CURSOR_X)      &mmv_const MOVE_Y(-CURSOR_Y)      &mmv_const MOVE_Y(CURSOR_Y)      &mmv_const MOVE_X(CURSOR_X)      &mspd MSPD_DEC
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X / 2)  &mmv_accel MOVE_Y(-CURSOR_Y / 2)  &mmv_accel MOVE_Y(CURSOR_Y / 2)  &mmv_accel MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X)      &mmv_accel MOVE_Y(-CURSOR_Y)      &mmv_accel MOVE_Y(CURSOR_Y)      &mmv_accel MOVE_X(CURSOR_X)      &mspd MSPD_DEC
    &trans  &trans  &mo 9   &trans  &trans  &trans      &trans  &trans                            &trans                            &trans                           &trans                           &trans
                            &trans  &trans  &trans      &trans  &trans
             >;
