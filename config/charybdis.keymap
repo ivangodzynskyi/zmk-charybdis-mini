@@ -291,9 +291,9 @@
 
         Scr {
             bindings = <
-   &trans  &trans  &trans               &trans              &trans              &trans          &trans      &trans  &scroll_up_fast     &scroll_up_mid      &scroll_up_slow     &trans
-   &trans  &trans  &scroll_up_slow      &scroll_up_mid      &scroll_up_fast     &trans          &trans      &trans  &scroll_down_fast   &scroll_down_mid    &scroll_down_slow   &trans
-   &trans  &trans  &scroll_down_slow    &scroll_down_mid    &scroll_down_fast   &trans          &trans      &trans  &trans              &trans              &trans              &trans
+   &trans  &trans  &trans               &trans              &trans              &trans          &trans      &trans  &scroll_up_slow     &scroll_down_slow   &trans              &scroll_up_fast
+   &trans  &trans  &scroll_up_fast      &scroll_up_mid      &scroll_up_slow     &trans          &trans      &trans  &scroll_up_mid      &scroll_down_mid    &trans              &scroll_down_fast
+   &trans  &trans  &scroll_down_fast    &scroll_down_mid    &scroll_down_slow   &trans          &trans      &trans  &trans              &trans              &trans              &trans
                                         &trans              &trans              &trans          &trans      &trans
             >;
         };
