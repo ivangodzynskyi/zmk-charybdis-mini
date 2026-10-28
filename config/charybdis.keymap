@@ -4,10 +4,16 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/mouse_speed.h>
 #include <dt-bindings/zmk/keys.h>
 
 // Wheel units per second for the scroll_up_* / scroll_down_* macros
 #define SCROLL_SPEED(n) ((n) * 10)
+
+// Keyboard cursor speed in pixels per second at the 100% speed level.
+// Horizontal is 15/9 of vertical so diagonals follow the screen aspect ratio.
+#define CURSOR_Y 600
+#define CURSOR_X (CURSOR_Y * 15 / 9)
 
 &lt {
     tapping-term-ms = <200>;
@@ -45,11 +51,46 @@
             time-to-max-speed-ms = <0>;
             acceleration-exponent = <0>;
         };
+
+        // Constant-speed cursor movement: moves while held, stops on release.
+        // Holding two directions adds them up into a diagonal
+        mmv_const: mouse_move_constant {
+            compatible = "zmk,behavior-input-two-axis";
+            #binding-cells = <1>;
+            x-input-code = <INPUT_REL_X>;
+            y-input-code = <INPUT_REL_Y>;
+            trigger-period-ms = <8>;
+            time-to-max-speed-ms = <0>;
+            acceleration-exponent = <0>;
+        };
+
+        // Steps the mmv_const speed level up or down for the active BT profile
+        mspd: mouse_speed {
+            compatible = "zmk,behavior-mouse-speed";
+            #binding-cells = <1>;
+        };
+    };
+
+    zip_mouse_speed: zip_mouse_speed {
+        compatible = "zmk,input-processor-mouse-speed";
+        #input-processor-cells = <2>;
     };
 
     msc_smooth_input_listener {
         compatible = "zmk,input-listener";
         device = <&msc_smooth>;
+    };
+
+    mmv_const_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&mmv_const>;
+        input-processors = <&zip_mouse_speed 1 1>;
+
+        // Holding X on the MouseKeys layer halves the speed
+        slow {
+            layers = <9>;
+            input-processors = <&zip_mouse_speed 1 2>;
+        };
     };
 
     macros {
@@ -128,18 +169,21 @@
                 bindings = <&kp ENTER>;
                 key-positions = <8 9>;
                 timeout-ms = <50>;
+                layers = <0>;
             };
 
             combo_mouse_L {
                 bindings = <&mkp LCLK>;
                 key-positions = <7 8>;
                 timeout-ms = <50>;
+                layers = <0>;
             };
 
             combo_mouse_M {
                 bindings = <&mkp MCLK>;
                 key-positions = <9 10>;
                 timeout-ms = <50>;
+                layers = <0>;
             };
 
             combo_cmd_C {
@@ -173,7 +217,7 @@
   &kp GRAVE     &kp Q       &kp W           &mt GLOBE E         &kp R       &kp T           &lt 7 Y         &lt 7 U        &lt 6 I           &kp O        &lt 5 P             &kp LBKT
   &kp TAB       &mt LSHFT A &mt LCTRL S     &mt LEFT_ALT D      &mt LGUI F  &kp G           &kp H           &mt LGUI J     &mt LEFT_ALT K    &mt LCTRL L  &mt LSHFT SEMI      &kp APOS
   &mo 4         &lt 5 Z     &kp X           &lt 1 C             &lt 2 V     &kp B           &kp N           &kp M          &lt 3 COMMA       &kp DOT      &kp FSLH            &mkp RCLK
-                                            &mkp LCLK           &lt 1 BSPC  &lt 2 ESC       &lt 1 SPACE     &kp RET
+                                            &mkp LCLK           &lt 1 BSPC  &lt 2 ESC       &lt 8 SPACE     &kp RET
             >;
         };
 
@@ -244,6 +288,25 @@
                                         &trans              &trans              &trans          &trans      &trans
             >;
         };
-        
+
+        // Hold Space. JKL; move at full speed, UIOP at half speed, X held
+        // halves any movement, [ and ' step the speed up and down
+        MouseKeys {
+            bindings = <
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_const MOVE_X(-CURSOR_X / 2)  &mmv_const MOVE_Y(-CURSOR_Y / 2)  &mmv_const MOVE_Y(CURSOR_Y / 2)  &mmv_const MOVE_X(CURSOR_X / 2)  &mspd MSPD_INC
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &mmv_const MOVE_X(-CURSOR_X)      &mmv_const MOVE_Y(-CURSOR_Y)      &mmv_const MOVE_Y(CURSOR_Y)      &mmv_const MOVE_X(CURSOR_X)      &mspd MSPD_DEC
+   &trans  &trans  &mo 9   &trans  &trans  &trans      &trans  &trans                            &trans                            &trans                           &trans                           &trans
+                           &trans  &trans  &trans      &trans  &trans
+            >;
+        };
+
+        MouseKeysSlow {
+            bindings = <
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+   &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+                           &trans  &trans  &trans      &trans  &trans
+            >;
+        };
     };
 };

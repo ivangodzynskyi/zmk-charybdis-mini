@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+
+description: Scales REL_X/REL_Y by the stored speed level and by mul/div params
+
+compatible: "zmk,input-processor-mouse-speed"
+
+include: ip_two_param.yaml

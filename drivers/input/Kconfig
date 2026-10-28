@@ -30,3 +30,10 @@ config ZMK_INPUT_PINNACLE_IDLE_SLEEPER
 endif
 
 endif
+
+config ZMK_MOUSE_SPEED
+    bool "Adjustable keyboard cursor speed stored per BLE profile"
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_MOUSE_SPEED_ENABLED
+    depends on DT_HAS_ZMK_INPUT_PROCESSOR_MOUSE_SPEED_ENABLED
+    depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL

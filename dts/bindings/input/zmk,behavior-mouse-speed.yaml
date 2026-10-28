@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+
+description: Steps the keyboard cursor speed up or down for the active BLE profile
+
+compatible: "zmk,behavior-mouse-speed"
+
+include: one_param.yaml
