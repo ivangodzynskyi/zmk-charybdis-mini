@@ -288,11 +288,14 @@
             >;
         };
 
+        // Hold P. [ and ' step the keyboard cursor speed up and down, ` and Tab
+        // the scroll speed, Q/A the jump step, E/R the delay between jumps,
+        // the bottom-left key reverses scrolling up and down
         Mouse {
             bindings = <
-   &trans  &trans  &trans               &trans              &trans              &trans          &trans      &trans               &mkp MCLK           &mkp RCLK         &trans      &trans
-   &trans  &trans  &scroll_up_slow      &scroll_up_mid      &scroll_up_fast     &trans          &trans      &scroll_up_fast      &scroll_up_mid      &scroll_up_slow   &trans      &trans
-   &trans  &trans  &scroll_down_slow    &scroll_down_mid    &scroll_down_fast   &trans          &trans      &scroll_down_fast    &scroll_down_mid    &scroll_down_slow &trans      &trans
+   &mspd MSPD_SCRL_INC  &mspd MSPD_JUMP_INC  &trans               &mspd MSPD_DELAY_INC  &mspd MSPD_DELAY_DEC  &trans          &trans      &trans               &mkp MCLK           &mkp RCLK         &trans      &mspd MSPD_INC
+   &mspd MSPD_SCRL_DEC  &mspd MSPD_JUMP_DEC  &scroll_up_slow      &scroll_up_mid        &scroll_up_fast       &trans          &trans      &scroll_up_fast      &scroll_up_mid      &scroll_up_slow   &trans      &mspd MSPD_DEC
+   &mspd MSPD_SCRL_REV  &trans               &scroll_down_slow    &scroll_down_mid      &scroll_down_fast     &trans          &trans      &scroll_down_fast    &scroll_down_mid    &scroll_down_slow &trans      &trans
                                         &trans              &trans              &trans          &mkp LCLK   &trans
             >;
         };
@@ -318,16 +321,14 @@
 
         // Hold Space, or tap Enter to toggle the layer on and off. UIOP jump
         // the cursor in steps for coarse aiming, JKL; move it smoothly for
-        // precise aiming, X held halves smooth movement,
-        // [ and ' step the cursor speed up and down, T/G the jump step,
-        // Q/A the delay between jumps.
-        // D/C scroll at mid speed, F/V slowly, ` and Tab step the scroll speed,
-        // the bottom-left key reverses scrolling up and down
+        // precise aiming, X held halves smooth movement.
+        // D/C scroll at mid speed, F/V slowly. Speed, jump and scroll
+        // settings live on the Mouse layer
         MouseKeys {
             bindings = <
-   &mspd MSPD_SCRL_INC  &mspd MSPD_DELAY_INC  &trans  &trans              &trans              &mspd MSPD_JUMP_INC      &trans  &mjmp MJMP_LEFT              &mjmp MJMP_UP                &mjmp MJMP_DOWN              &mjmp MJMP_RIGHT             &mspd MSPD_INC
-   &mspd MSPD_SCRL_DEC  &mspd MSPD_DELAY_DEC  &trans  &scroll_up_mid      &scroll_up_slow     &mspd MSPD_JUMP_DEC      &trans  &mmv_accel MOVE_X(-CURSOR_X) &mmv_accel MOVE_Y(-CURSOR_Y) &mmv_accel MOVE_Y(CURSOR_Y)  &mmv_accel MOVE_X(CURSOR_X)  &mspd MSPD_DEC
-   &mspd MSPD_SCRL_REV  &trans                &mo 9   &scroll_down_mid    &scroll_down_slow   &trans                   &trans  &mkp LCLK                    &trans                       &mkp MCLK                    &mkp RCLK                    &trans
+   &trans  &trans  &trans  &trans              &trans              &trans      &trans  &mjmp MJMP_LEFT              &mjmp MJMP_UP                &mjmp MJMP_DOWN              &mjmp MJMP_RIGHT             &trans
+   &trans  &trans  &trans  &scroll_up_mid      &scroll_up_slow     &trans      &trans  &mmv_accel MOVE_X(-CURSOR_X) &mmv_accel MOVE_Y(-CURSOR_Y) &mmv_accel MOVE_Y(CURSOR_Y)  &mmv_accel MOVE_X(CURSOR_X)  &trans
+   &trans  &trans  &mo 9   &scroll_down_mid    &scroll_down_slow   &trans      &trans  &mkp LCLK                    &trans                       &mkp MCLK                    &mkp RCLK                    &trans
                            &trans  &trans  &trans      &trans  &trans
             >;
         };
