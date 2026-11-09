@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Moves the cursor in steps while held: one step on press, then another step
+  after every repeat delay until release. Step size and delay come from the
+  levels set with zmk,behavior-mouse-speed for the active BLE profile.
+
+compatible: "zmk,behavior-mouse-jump"
+
+include: one_param.yaml
+
+properties:
+  horizontal-mul:
+    type: int
+    default: 1
+    description: Horizontal steps are the vertical step times horizontal-mul / horizontal-div
+  horizontal-div:
+    type: int
+    default: 1
